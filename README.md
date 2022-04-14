@@ -1,4 +1,4 @@
-# simpl
+# Simple Virtual DOM
 
 ## Goal
 
