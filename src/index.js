@@ -4,7 +4,7 @@ import { $ } from './util/selector';
 /** @jsx Veact.createElement */
 const element = (
     <div id="foo">
-        <h1>bar</h1>
+        <h1 class="sub-title">bar</h1>
         <h2>hello</h2>
     </div>
 );

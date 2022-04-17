@@ -1,12 +1,13 @@
-const TEXT_ELEMENT = 'TEXT_ELEMENT';
+import { isObject } from '@/util/object';
+import { isTextElement, isProperty, setAttribute } from '@/util/element';
+import { TEXT_ELEMENT } from '@/constants/element';
 
-const isTextElement = element => element.type === TEXT_ELEMENT;
-const isObject = element => typeof element === 'object';
-const isProperty = prop => prop !== 'children';
-const setValue = ($dom, prop, value) => ($dom[prop] = value);
-const mapChildElement = element => (isObject(element) ? element : createTextElement(element));
+// element type이 원시값인 경우, text node로 반환
+const mapChildElement = element => {
+    return isObject(element) ? element : createTextElement(element);
+};
 
-function createElement(type, props, ...children) {
+const createElement = (type, props, ...children) => {
     return {
         type,
         props: {
@@ -14,9 +15,9 @@ function createElement(type, props, ...children) {
             children: children.map(mapChildElement),
         },
     };
-}
+};
 
-function createTextElement(text) {
+const createTextElement = text => {
     return {
         type: TEXT_ELEMENT,
         props: {
@@ -24,19 +25,19 @@ function createTextElement(text) {
             children: [],
         },
     };
-}
+};
 
-function render(element, $container) {
+const render = (element, $container) => {
     const $dom = isTextElement(element)
         ? document.createTextNode('')
         : document.createElement(element.type);
 
     Object.keys(element.props)
         .filter(isProperty)
-        .forEach(prop => setValue($dom, prop, element.props[prop]));
+        .forEach(prop => setAttribute($dom, prop, element.props[prop]));
 
     element.props.children.forEach(child => render(child, $dom));
     $container.appendChild($dom);
-}
+};
 
 export default { createElement, createTextElement, render };
