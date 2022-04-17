@@ -27,16 +27,14 @@ const createTextElement = text => {
     };
 };
 
-const render = (element, $container) => {
-    const $dom = isTextElement(element)
-        ? document.createTextNode('')
-        : document.createElement(element.type);
+const render = ({ type, props }, $container) => {
+    const $dom = isTextElement(type) ? document.createTextNode('') : document.createElement(type);
 
-    Object.keys(element.props)
+    Object.keys(props)
         .filter(isProperty)
-        .forEach(prop => setAttribute($dom, prop, element.props[prop]));
+        .forEach(prop => setAttribute($dom, prop, props[prop]));
 
-    element.props.children.forEach(child => render(child, $dom));
+    props.children.forEach(child => render(child, $dom));
     $container.appendChild($dom);
 };
 
